@@ -1,25 +1,55 @@
-import React from 'react'
-import '../styles/App.css';
-import {useSelector,useDispatch} from "react-redux";
-import { onInputChange } from '../actions/index.js';
-const App = () => {
-const myState = useSelector((state)=>state.tellZodiac);
-const dispatch =useDispatch();
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  decrement,
+  increment,
+  incrementByAmount,
+  signIn,
+  signOut,
+} from "../actions/action";
+
+function App() {
+  const [amount, setAmount] = useState(2);
+  const counter = useSelector((prestate) => prestate.counter);
+  const islogged = useSelector((prestate) => prestate.islogged);
+
+  const dispatch = useDispatch();
+  const handleIncre = () => {
+    dispatch(increment());
+  };
+  const handleDecre = () => {
+    dispatch(decrement());
+  };
+  const handleIncreByAmt = () => {
+    dispatch(incrementByAmount(parseInt(amount)));
+  };
+  const handleLogin = () => {
+    dispatch(signIn());
+  };
+  const handleLogOut = () => {
+    dispatch(signOut());
+  };
 
   return (
     <div id="main">
-      
-       <div>
-       <h1>Get your Zodiac </h1>
-        Enter Birthday month
-        <input id='input' onChange={(e)=>dispatch(onInputChange(e.target.value))}  /><br/>
-        Output Zodiac
-        <input id='output' value={myState} />
-       </div>
-
+      {islogged ? (
+        <div>
+          <button onClick={handleLogOut}>Logout</button>
+          <button onClick={handleIncre}>+</button>
+          <span data-testid="counter">{counter}</span>
+          <button onClick={handleDecre}>-</button>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+          <button onClick={handleIncreByAmt}>Add amount</button>
+        </div>
+      ) : (
+        <button onClick={handleLogin}>Login</button>
+      )}
     </div>
-  )
+  );
 }
-
 
 export default App;
